@@ -1,3 +1,29 @@
+## DarkWeb Scraper Pro v4.1 - Release Notes
+
+### The Fix
+
+**"1 link at a time" is dead.** v4.0's Layer 2 dedup treated every link on a
+domain you'd already seen as a duplicate — one result per site, period. v4.1
+only dedups bare landing-page links (`http://x.onion`), so deep links from the
+same site now come through like they always should have.
+
+### Saner Defaults (you were self-DDoS-ing)
+
+- max results 5000 → 500
+- timeout 10s → 15s
+- workers 16 → 8
+- batch size 50 → 25
+- retry backoff 0.5s → 1.0s
+
+### Added
+- Engine health summary after every search.
+
+### README
+- Version banner: 4.10 (07-31-2026)
+- Last commit badge now shows a real date.
+
+Full changelog in CHANGELOG.md.
+
 ## DarkWeb Scraper Pro v4.0 - Release Notes
 
 ### The Big Four

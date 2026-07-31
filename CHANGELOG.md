@@ -2,6 +2,33 @@
 
 All notable changes to DarkWeb Scraper Pro will be documented in this file.
 
+## [4.1.0] - 2026-07-31
+
+### Fixed
+- **"1 link at a time" bug (Layer 2)**: the blanket `domain_duplicate` check
+  flagged every result on an already-seen domain as a duplicate, so after the
+  first link from a site, everything else on that domain was silently dropped.
+  Now only bare-domain root links (landing pages, e.g. `http://x.onion`) are
+  deduped; deep links are kept. Multi-page and multi-engine harvesting works
+  as intended again.
+- **Repo size badge**: displays 0 B until GitHub recomputes the `size` field
+  for the migrated repo — resolves itself; contents verified intact.
+- **Last commit badge**: now renders the commit date (YYYY-MM-DD) instead of
+  a relative "today" label.
+
+### Changed (sane defaults — v4.0 was tuned for maximum hammer)
+- Default max results: 5000 → 500
+- Default timeout: 10s → 15s (onion engines are slow; fail-fast was killing them)
+- Default workers: 16 → 8
+- Default batch size: 50 → 25
+- Retry backoff factor: 0.5 → 1.0 (gentler on rate-limited engines)
+
+### Added
+- Engine health report at end of search: "N responded, M empty/failed of K".
+
+### Technical
+- VERSION bumped to 4.1. Full backward compatibility with v4.0 state files.
+
 ## [4.0.0] - 2026-06-28
 
 ### Added

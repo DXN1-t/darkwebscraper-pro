@@ -1,5 +1,5 @@
 """
-DarkWeb Scraper Pro v4.0
+DarkWeb Scraper Pro v4.1
 The Most Dangerous Onion Intelligence Engine Ever Written
 
 12 search engines (3 clearnet + 9 onion) | 10-layer dedup | Tor SOCKS5 proxy
@@ -32,11 +32,11 @@ import threading
 # =============================================================================
 # CONFIG
 # =============================================================================
-VERSION = "4.0"
-DEFAULT_BATCH_SIZE = 50
-DEFAULT_MAX_RESULTS = 5000
-DEFAULT_TIMEOUT = 10
-DEFAULT_MAX_WORKERS = min(max(8, os.cpu_count() or 8), 16)
+VERSION = "4.1"
+DEFAULT_BATCH_SIZE = 25
+DEFAULT_MAX_RESULTS = 500
+DEFAULT_TIMEOUT = 15
+DEFAULT_MAX_WORKERS = min(max(4, os.cpu_count() or 4), 8)
 DEFAULT_PAGES = 1
 DEFAULT_TOR_PROXY = "socks5h://127.0.0.1:9050"
 POOL_CONNECTIONS = 30
@@ -104,7 +104,7 @@ def _create_session(timeout=DEFAULT_TIMEOUT, proxy=None):
     session = requests.Session()
     retry_strategy = Retry(
         total=3,
-        backoff_factor=0.5,
+        backoff_factor=1.0,
         status_forcelist=[429, 500, 502, 503, 504],
         allowed_methods=["GET"],
     )
@@ -541,6 +541,12 @@ class DedupEngine:
                 return True
         return False
 
+    @staticmethod
+    def _is_bare_domain_link(url):
+        parsed = urlparse(url)
+        path = parsed.path.rstrip('/')
+        return not path and not parsed.query
+
     def is_duplicate(self, title, link):
         domain = self._extract_domain(link)
         normalized = self._normalize_url(link)
@@ -553,7 +559,11 @@ class DedupEngine:
         # Layers 1-7: O(1) set lookups
         if content_hash in self.seen_hashes:
             return True, "exact_hash"
-        if domain in self.seen_domains:
+        # Layer 2 (v4.1 fix): only flag duplicate when the link is the bare
+        # domain root (landing page). Deep links on the same domain are NOT
+        # duplicates — the old blanket check killed every result after the
+        # first per site ("only 1 link at a time" bug).
+        if domain in self.seen_domains and self._is_bare_domain_link(normalized):
             return True, "domain_duplicate"
         if normalized in self.seen_links:
             return True, "normalized_url"
@@ -1152,6 +1162,11 @@ def search_all_engines(query, engine_names=None, max_results=5000,
                 _printer.stage('error', f"{engine_name} failed", str(e))
                 engine_results[engine_name] = []
 
+    ok_engines = sum(1 for r in engine_results.values() if r)
+    empty_engines = sum(1 for r in engine_results.values() if not r)
+    _printer.stage('info', "Engine health",
+                   f"{ok_engines} responded, {empty_engines} empty/failed of {len(engines)}")
+
     _printer.stage('filter', f"Deduping across {len(engines)} engines (10 layers)...")
     all_results = []
     skipped = defaultdict(int)
@@ -1356,7 +1371,7 @@ def copy_output_to_downloads(filename="darkweb.txt"):
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="darkwebscraper-pro",
-        description="DarkWeb Scraper Pro v4.0 \u2014 12-Engine Onion Intelligence System",
+        description="DarkWeb Scraper Pro v4.1 \u2014 12-Engine Onion Intelligence System",
         epilog="By DXN1-t | MIT License"
     )
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {VERSION}')

@@ -1,5 +1,5 @@
 # <div align="center"> MADE WITH ❤️ BY DXN1
-# <div align="center"> ``` version 4.00 06-27-2026 ```
+# <div align="center"> ``` version 4.10 07-31-2026 ```
 
 <h2>🕸️ The Most Dangerous Onion Intelligence Engine Ever Written 🕸️</h2>
 <h4>Built by the shadows. Runs in the dark. Knows everything twice.</h4>
@@ -19,7 +19,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome%20👊-ff69b4?style=for-the-badge)](https://github.com/DXN1-t/darkwebscraper-pro/pulls)
 [![Stars](https://img.shields.io/github/stars/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=github&color=fbbf24)](https://github.com/DXN1-t/darkwebscraper-pro/stargazers)
 [![Forks](https://img.shields.io/github/forks/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=github&color=34d399)](https://github.com/DXN1-t/darkwebscraper-pro/network/members)
-[![Last Commit](https://img.shields.io/github/last-commit/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=git&color=f59e0b)](https://github.com/DXN1-t/darkwebscraper-pro/commits/main)
+[![Last Commit](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2FDXN1-t%2Fdarkwebscraper-pro%2Fcommits%2Fmain%3Fper_page%3D1&query=commit.committer.date&label=Last%20Commit&style=for-the-badge&logo=git&color=f59e0b)](https://github.com/DXN1-t/darkwebscraper-pro/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=files&color=a78bfa)]()
 [![Code Size](https://img.shields.io/github/languages/code-size/DXN1-t/darkwebscraper-pro?style=for-the-badge&color=fb923c)]()
 [![Top Language](https://img.shields.io/github/languages/top/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=python&color=3b82f6)]()
