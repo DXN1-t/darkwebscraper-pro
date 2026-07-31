@@ -2,6 +2,22 @@
 
 All notable changes to DarkWeb Scraper Pro will be documented in this file.
 
+## [4.1.1] - 2026-07-31
+
+### Fixed
+- **Termux install broken**: `lxml` was a hard dependency and fails to build
+  on Termux (wheel build error), which also blocked `beautifulsoup4` from
+  installing. `lxml` removed from `requirements.txt` — the parser now uses
+  the built-in `html.parser` fallback (with a visible note). Optional lxml
+  lives in `requirements-lxml.txt` for desktop users who want 3x faster
+  parsing.
+- Visible warning when falling back to `html.parser`.
+
+### Changed
+- `requirements.txt`: requests, beautifulsoup4, urllib3, PySocks only.
+- Added `requirements-lxml.txt` (optional speed profile).
+- README install steps updated for Termux; version banner 4.11.
+
 ## [4.1.0] - 2026-07-31
 
 ### Fixed

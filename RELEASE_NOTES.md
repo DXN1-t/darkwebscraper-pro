@@ -1,3 +1,18 @@
+## DarkWeb Scraper Pro v4.1.1 - Release Notes
+
+### Termux install fixed
+
+`pip install -r requirements.txt` was dying on the `lxml` wheel build and
+never got to `beautifulsoup4`. lxml is now optional:
+
+- `requirements.txt` = requests, bs4, urllib3, PySocks (Termux-safe)
+- `requirements-lxml.txt` = adds lxml for desktop users (3x faster parsing)
+
+The engine prints a visible note when it falls back to `html.parser`.
+
+### Changelog
+See CHANGELOG.md. Full history in this repo.
+
 ## DarkWeb Scraper Pro v4.1 - Release Notes
 
 ### The Fix

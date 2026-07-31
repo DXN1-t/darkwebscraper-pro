@@ -1,5 +1,5 @@
 # <div align="center"> MADE WITH ❤️ BY DXN1
-# <div align="center"> ``` version 4.10 07-31-2026 ```
+# <div align="center"> ``` version 4.11 07-31-2026 ```
 
 <h2>🕸️ The Most Dangerous Onion Intelligence Engine Ever Written 🕸️</h2>
 <h4>Built by the shadows. Runs in the dark. Knows everything twice.</h4>
@@ -338,7 +338,7 @@ git clone https://github.com/DXN1-t/darkwebscraper-pro.git
 cd darkwebscraper-pro
 
 # 3. Install Python deps
-pip install -r requirements.txt
+pip install -r requirements.txt  # lxml NOT required - html.parser fallback works on Termux
 
 # 4. Launch
 python darkwebscraper-pro.py
@@ -354,7 +354,7 @@ cd darkwebscraper-pro
 # Virtual env (recommended)
 python3 -m venv .venv && source .venv/bin/activate
 
-# Deps
+# Deps (lxml optional - install requirements-lxml.txt for 3x faster parsing)
 pip install -r requirements.txt
 
 # Run
@@ -450,7 +450,8 @@ darkwebscraper-pro/
 │   ├── get_onion_links_and_titles() # Live torch.cx scraper
 │   ├── save_results_to_file()  # Appends new results
 │   └── copy_output_to_downloads() # Android export helper
-├── requirements.txt        # requests, beautifulsoup4
+├── requirements.txt        # requests, bs4, PySocks (Termux-safe, no lxml)
+├── requirements-lxml.txt  # optional: lxml for 3x faster parsing (desktop)
 ├── .gitignore              # Ignores runtime files
 ├── LICENSE                 # MIT
 ├── README.md               # This glorious document

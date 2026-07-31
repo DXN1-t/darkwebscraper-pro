@@ -1,5 +1,5 @@
 """
-DarkWeb Scraper Pro v4.1
+DarkWeb Scraper Pro v4.1.1
 The Most Dangerous Onion Intelligence Engine Ever Written
 
 12 search engines (3 clearnet + 9 onion) | 10-layer dedup | Tor SOCKS5 proxy
@@ -32,7 +32,7 @@ import threading
 # =============================================================================
 # CONFIG
 # =============================================================================
-VERSION = "4.1"
+VERSION = "4.1.1"
 DEFAULT_BATCH_SIZE = 25
 DEFAULT_MAX_RESULTS = 500
 DEFAULT_TIMEOUT = 15
@@ -48,6 +48,8 @@ try:
     _PARSER = 'lxml'
 except ImportError:
     _PARSER = 'html.parser'
+    print("NOTE: lxml not available - using html.parser (slower). "
+          "optional speedup: pip install -r requirements-lxml.txt", file=sys.stderr)
 
 # =============================================================================
 # PRE-COMPILED REGEX — all patterns compiled once at import time (v4 speedup)
@@ -1371,7 +1373,7 @@ def copy_output_to_downloads(filename="darkweb.txt"):
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="darkwebscraper-pro",
-        description="DarkWeb Scraper Pro v4.1 \u2014 12-Engine Onion Intelligence System",
+        description="DarkWeb Scraper Pro v4.1.1 \u2014 12-Engine Onion Intelligence System",
         epilog="By DXN1-t | MIT License"
     )
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {VERSION}')
