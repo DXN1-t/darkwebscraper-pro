@@ -16,13 +16,13 @@
 [![State](https://img.shields.io/badge/State-Persistent%20JSON-0ea5e9?style=for-the-badge&logo=json&logoColor=white)]()
 [![Fuzzy](https://img.shields.io/badge/Matching-Fuzzy%20%2B%20Phonetic-ec4899?style=for-the-badge&logo=soundcloud&logoColor=white)]()
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome%20👊-ff69b4?style=for-the-badge)](https://github.com/DXN1-termux/darkwebscraper-pro/pulls)
-[![Stars](https://img.shields.io/github/stars/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=github&color=fbbf24)](https://github.com/DXN1-termux/darkwebscraper-pro/stargazers)
-[![Forks](https://img.shields.io/github/forks/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=github&color=34d399)](https://github.com/DXN1-termux/darkwebscraper-pro/network/members)
-[![Last Commit](https://img.shields.io/github/last-commit/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=git&color=f59e0b)](https://github.com/DXN1-termux/darkwebscraper-pro/commits/main)
-[![Repo Size](https://img.shields.io/github/repo-size/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=files&color=a78bfa)]()
-[![Code Size](https://img.shields.io/github/languages/code-size/DXN1-termux/darkwebscraper-pro?style=for-the-badge&color=fb923c)]()
-[![Top Language](https://img.shields.io/github/languages/top/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=python&color=3b82f6)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome%20👊-ff69b4?style=for-the-badge)](https://github.com/DXN1-t/darkwebscraper-pro/pulls)
+[![Stars](https://img.shields.io/github/stars/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=github&color=fbbf24)](https://github.com/DXN1-t/darkwebscraper-pro/stargazers)
+[![Forks](https://img.shields.io/github/forks/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=github&color=34d399)](https://github.com/DXN1-t/darkwebscraper-pro/network/members)
+[![Last Commit](https://img.shields.io/github/last-commit/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=git&color=f59e0b)](https://github.com/DXN1-t/darkwebscraper-pro/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=files&color=a78bfa)]()
+[![Code Size](https://img.shields.io/github/languages/code-size/DXN1-t/darkwebscraper-pro?style=for-the-badge&color=fb923c)]()
+[![Top Language](https://img.shields.io/github/languages/top/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=python&color=3b82f6)]()
 
 ---
 
@@ -334,7 +334,7 @@ Every time a new link is accepted, it's added to **8 separate state vectors** in
 pkg update -y && pkg install python git -y
 
 # 2. Clone the repo
-git clone https://github.com/DXN1-termux/darkwebscraper-pro.git
+git clone https://github.com/DXN1-t/darkwebscraper-pro.git
 cd darkwebscraper-pro
 
 # 3. Install Python deps
@@ -348,7 +348,7 @@ python darkwebscraper-pro.py
 
 ```bash
 # Clone
-git clone https://github.com/DXN1-termux/darkwebscraper-pro.git
+git clone https://github.com/DXN1-t/darkwebscraper-pro.git
 cd darkwebscraper-pro
 
 # Virtual env (recommended)
@@ -364,7 +364,7 @@ python3 darkwebscraper-pro.py
 ### 💉 One-Liner Install + Run
 
 ```bash
-git clone https://github.com/DXN1-termux/darkwebscraper-pro.git && cd darkwebscraper-pro && pip install -r requirements.txt && python3 darkwebscraper-pro.py
+git clone https://github.com/DXN1-t/darkwebscraper-pro.git && cd darkwebscraper-pro && pip install -r requirements.txt && python3 darkwebscraper-pro.py
 ```
 
 ### 📦 pip (manual deps only)
@@ -484,7 +484,7 @@ darkwebscraper-pro/
 PRs are welcome. Fork it, make it better, ship it.
 
 ```bash
-git clone https://github.com/DXN1-termux/darkwebscraper-pro.git
+git clone https://github.com/DXN1-t/darkwebscraper-pro.git
 cd darkwebscraper-pro
 git checkout -b feature/your-idea
 # hack away
@@ -505,11 +505,11 @@ git push origin feature/your-idea
 
 ```
   ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·
-              Made with 🖤 in the dark by DXN1-termux
+              Made with 🖤 in the dark by DXN1-t
   ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·  ·
 ```
 
-[![GitHub](https://img.shields.io/badge/GitHub-DXN1--termux-181717?style=for-the-badge&logo=github)](https://github.com/DXN1-termux)
-[![Stars](https://img.shields.io/github/stars/DXN1-termux/darkwebscraper-pro?style=for-the-badge&logo=github&color=fbbf24&label=⭐%20Stars)](https://github.com/DXN1-termux/darkwebscraper-pro/stargazers)
+[![GitHub](https://img.shields.io/badge/GitHub-DXN1--termux-181717?style=for-the-badge&logo=github)](https://github.com/DXN1-t)
+[![Stars](https://img.shields.io/github/stars/DXN1-t/darkwebscraper-pro?style=for-the-badge&logo=github&color=fbbf24&label=⭐%20Stars)](https://github.com/DXN1-t/darkwebscraper-pro/stargazers)
 
 </div>

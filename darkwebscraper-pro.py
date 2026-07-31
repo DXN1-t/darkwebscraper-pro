@@ -6,7 +6,7 @@ The Most Dangerous Onion Intelligence Engine Ever Written
 Pre-compiled regex | Domain-indexed fuzzy matching | Multi-page concurrent search
 Batch persistence | Multiple export formats | 4x faster than v3
 
-By DXN1-termux | MIT License
+By DXN1-t | MIT License
 """
 
 import requests
@@ -1357,7 +1357,7 @@ def build_parser():
     parser = argparse.ArgumentParser(
         prog="darkwebscraper-pro",
         description="DarkWeb Scraper Pro v4.0 \u2014 12-Engine Onion Intelligence System",
-        epilog="By DXN1-termux | MIT License"
+        epilog="By DXN1-t | MIT License"
     )
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {VERSION}')
     parser.add_argument('-q', '--query', type=str, default=None,

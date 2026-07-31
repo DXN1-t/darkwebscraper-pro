@@ -41,7 +41,7 @@ New `--pages N` flag fetches up to N pages per engine. With 12 engines × 3 page
 ### Quick Start
 
 ```bash
-git clone https://github.com/DXN1-termux/darkwebscraper-pro.git
+git clone https://github.com/DXN1-t/darkwebscraper-pro.git
 cd darkwebscraper-pro
 pip install -r requirements.txt
 python3 darkwebscraper-pro.py
