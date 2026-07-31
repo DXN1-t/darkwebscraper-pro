@@ -1,3 +1,24 @@
+## DarkWeb Scraper Pro v4.1.2 - Release Notes
+
+### torch.cx fixed (the "0 results" bug)
+
+The engine was building `https://torch.cx/search?q=...&page=1`. torch.cx
+redirects `/search?...` to `/search/?...` and returns **HTTP 500 on any
+`page` param** — so every torch.cx search silently returned 0 results. Fixed:
+torch.cx is fetched without `page`; it already returns everything it has on
+one page (1,669 results for a "test" query).
+
+### Fetch everything
+
+`-m/--max-results` now defaults to `0` = **no limit**. It grabs as many
+results as the engines can find. Still want a cap? `-m 100` works exactly as
+before.
+
+### Termux
+
+Same install as v4.1.1: `git pull`, then `pip install -r requirements.txt`
+(lxml-free, includes beautifulsoup4).
+
 ## DarkWeb Scraper Pro v4.1.1 - Release Notes
 
 ### Termux install fixed

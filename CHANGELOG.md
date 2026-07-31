@@ -2,6 +2,21 @@
 
 All notable changes to DarkWeb Scraper Pro will be documented in this file.
 
+## [4.1.2] - 2026-07-31
+
+### Fixed
+- **torch.cx returned 0 results**: the engine appended `&page=1` to the
+  search URL, but torch.cx redirects `/search?...` to `/search/?...` and then
+  returns HTTP 500 on any `page` param — so `requests` bailed before parsing.
+  torch.cx is now fetched without `page` (it already returns every result it
+  has on a single page; verified 1,669 results for "test").
+
+### Changed
+- **Unlimited results by default**: `--max-results` default is now `0` (no
+  limit) — the scraper fetches everything an engine returns instead of
+  truncating at 500. Explicit caps still work (`-m 25` = 25).
+- README version banner: 4.12.
+
 ## [4.1.1] - 2026-07-31
 
 ### Fixed

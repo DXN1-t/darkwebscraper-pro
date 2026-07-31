@@ -1,5 +1,5 @@
 """
-DarkWeb Scraper Pro v4.1.1
+DarkWeb Scraper Pro v4.1.2
 The Most Dangerous Onion Intelligence Engine Ever Written
 
 12 search engines (3 clearnet + 9 onion) | 10-layer dedup | Tor SOCKS5 proxy
@@ -32,9 +32,9 @@ import threading
 # =============================================================================
 # CONFIG
 # =============================================================================
-VERSION = "4.1.1"
+VERSION = "4.1.2"
 DEFAULT_BATCH_SIZE = 25
-DEFAULT_MAX_RESULTS = 500
+DEFAULT_MAX_RESULTS = 0  # 0 = no limit: fetch everything an engine returns
 DEFAULT_TIMEOUT = 15
 DEFAULT_MAX_WORKERS = min(max(4, os.cpu_count() or 4), 8)
 DEFAULT_PAGES = 1
@@ -725,7 +725,7 @@ class SearchEngine:
     base_url = ""
     engine_type = "clearnet"  # "clearnet" or "onion"
 
-    def search(self, query, session, max_results=5000, max_pages=1):
+    def search(self, query, session, max_results=DEFAULT_MAX_RESULTS, max_pages=1):
         raise NotImplementedError
 
     @staticmethod
@@ -768,12 +768,13 @@ class PaginatedSearchEngine(SearchEngine):
                     onion = self._extract_onion_from_redirect(href)
                     if onion:
                         results.append((title, onion))
-            if len(results) >= max_results:
+            if max_results and len(results) >= max_results:
                 break
         return results
 
-    def search(self, query, session, max_results=5000, max_pages=1):
+    def search(self, query, session, max_results=DEFAULT_MAX_RESULTS, max_pages=1):
         all_results = []
+        limit = None if max_results <= 0 else max_results
         for page in range(1, max_pages + 1):
             try:
                 url = self._build_search_url(query, page)
@@ -785,14 +786,15 @@ class PaginatedSearchEngine(SearchEngine):
                 break
 
             soup = BeautifulSoup(resp.text, _PARSER)
-            page_results = self._parse_results(soup, max_results - len(all_results))
+            page_limit = None if limit is None else max(0, limit - len(all_results))
+            page_results = self._parse_results(soup, page_limit)
 
             if not page_results:
                 break
             all_results.extend(page_results)
-            if len(all_results) >= max_results:
+            if limit is not None and len(all_results) >= limit:
                 break
-        return all_results[:max_results]
+        return all_results if limit is None else all_results[:limit]
 
 
 # =============================================================================
@@ -804,43 +806,40 @@ class TorchEngine(SearchEngine):
     base_url = "https://torch.cx"
     engine_type = "clearnet"
 
-    def search(self, query, session, max_results=5000, max_pages=1):
+    def search(self, query, session, max_results=DEFAULT_MAX_RESULTS, max_pages=1):
         all_results = []
-        for page in range(1, max_pages + 1):
-            url = f"{self.base_url}/search?q={requests.utils.quote(query)}&page={page}"
-            try:
-                response = session.get(url, timeout=DEFAULT_TIMEOUT)
-                response.raise_for_status()
-            except requests.RequestException:
-                break
+        limit = None if max_results <= 0 else max_results
+        # torch.cx returns all results on one page and 500s on any &page= param
+        url = f"{self.base_url}/search?q={requests.utils.quote(query)}"
+        try:
+            response = session.get(url, timeout=DEFAULT_TIMEOUT)
+            response.raise_for_status()
+        except requests.RequestException:
+            return []
 
-            soup = BeautifulSoup(response.text, _PARSER)
-            raw_results = soup.select('div.result, li.result, div.g, div.rc')
+        soup = BeautifulSoup(response.text, _PARSER)
+        raw_results = soup.select('div.result, li.result, div.g, div.rc')
 
-            page_count = 0
-            for result in raw_results:
-                title_tag = result.find(['h3', 'a', 'b'])
-                title = title_tag.get_text(strip=True) if title_tag else result.get_text(strip=True)
-                if not title:
-                    title = "No title found"
+        for result in raw_results:
+            title_tag = result.find(['h3', 'a', 'b'])
+            title = title_tag.get_text(strip=True) if title_tag else result.get_text(strip=True)
+            if not title:
+                title = "No title found"
 
-                link = result.find('a', href=True)
-                if link and ('/search/redirect?' in link['href'] or 'onion' in link['href']):
-                    onion_link = ""
-                    if '/search/redirect?' in link['href']:
-                        onion_link = self._extract_onion_from_redirect(link['href']) or ""
-                    else:
-                        onion_link = link['href']
+            link = result.find('a', href=True)
+            if link and ('/search/redirect?' in link['href'] or 'onion' in link['href']):
+                onion_link = ""
+                if '/search/redirect?' in link['href']:
+                    onion_link = self._extract_onion_from_redirect(link['href']) or ""
+                else:
+                    onion_link = link['href']
 
-                    if onion_link and self._is_onion_link(onion_link):
-                        all_results.append((title, onion_link))
-                        page_count += 1
-                        if len(all_results) >= max_results:
-                            break
+                if onion_link and self._is_onion_link(onion_link):
+                    all_results.append((title, onion_link))
+                    if limit is not None and len(all_results) >= limit:
+                        break
 
-            if page_count == 0 and page > 1:
-                break
-        return all_results[:max_results]
+        return all_results if limit is None else all_results[:limit]
 
 
 # =============================================================================
@@ -852,8 +851,9 @@ class AhmiaEngine(SearchEngine):
     base_url = "https://ahmia.fi"
     engine_type = "clearnet"
 
-    def search(self, query, session, max_results=5000, max_pages=1):
+    def search(self, query, session, max_results=DEFAULT_MAX_RESULTS, max_pages=1):
         all_results = []
+        limit = None if max_results <= 0 else max_results
         for page in range(1, max_pages + 1):
             url = f"{self.base_url}/search/?q={requests.utils.quote(query)}&page={page}"
             try:
@@ -892,15 +892,15 @@ class AhmiaEngine(SearchEngine):
                         if onion:
                             results.append((title, onion))
 
-                if len(results) >= max_results:
+                if max_results and len(results) >= max_results:
                     break
 
             if not results and page > 1:
                 break
             all_results.extend(results)
-            if len(all_results) >= max_results:
+            if limit is not None and len(all_results) >= limit:
                 break
-        return all_results[:max_results]
+        return all_results if limit is None else all_results[:limit]
 
 
 # =============================================================================
@@ -912,8 +912,9 @@ class DarkSearchEngine(SearchEngine):
     base_url = "https://darksearch.io"
     engine_type = "clearnet"
 
-    def search(self, query, session, max_results=5000, max_pages=1):
+    def search(self, query, session, max_results=DEFAULT_MAX_RESULTS, max_pages=1):
         all_results = []
+        limit = None if max_results <= 0 else max_results
         for page in range(1, max_pages + 1):
             url = f"{self.base_url}/api/search"
             params = {"query": query, "page": page}
@@ -933,12 +934,12 @@ class DarkSearchEngine(SearchEngine):
                 if link and self._is_onion_link(link):
                     all_results.append((title, link))
                     page_count += 1
-                    if len(all_results) >= max_results:
+                    if limit is not None and len(all_results) >= limit:
                         break
 
             if page_count == 0 and page > 1:
                 break
-        return all_results[:max_results]
+        return all_results if limit is None else all_results[:limit]
 
 
 # =============================================================================
@@ -980,7 +981,7 @@ class HaystakEngine(PaginatedSearchEngine):
                 href = link['href']
                 if self._is_onion_link(href):
                     results.append((title, href))
-            if len(results) >= max_results:
+            if max_results and len(results) >= max_results:
                 break
         return results
 
@@ -1115,7 +1116,7 @@ DEFAULT_ENGINES = ["torch", "ahmia", "darksearch"]
 # MULTI-ENGINE CONCURRENT SEARCHER
 # =============================================================================
 
-def search_all_engines(query, engine_names=None, max_results=5000,
+def search_all_engines(query, engine_names=None, max_results=DEFAULT_MAX_RESULTS,
                        dedup_engine=None, max_pages=1, tor_proxy=None):
     if dedup_engine is None:
         dedup_engine = DedupEngine()
@@ -1182,10 +1183,10 @@ def search_all_engines(query, engine_names=None, max_results=5000,
                 continue
             dedup_engine.add(title, link, flush=False)
             all_results.append((title, link))
-            if len(all_results) >= max_results:
+            if max_results > 0 and len(all_results) >= max_results:
                 _printer.stage('warn', "Max limit hit", f"{max_results}")
                 break
-        if len(all_results) >= max_results:
+        if max_results > 0 and len(all_results) >= max_results:
             break
 
     dedup_engine.flush()
@@ -1373,7 +1374,7 @@ def copy_output_to_downloads(filename="darkweb.txt"):
 def build_parser():
     parser = argparse.ArgumentParser(
         prog="darkwebscraper-pro",
-        description="DarkWeb Scraper Pro v4.1.1 \u2014 12-Engine Onion Intelligence System",
+        description="DarkWeb Scraper Pro v4.1.2 \u2014 12-Engine Onion Intelligence System",
         epilog="By DXN1-t | MIT License"
     )
     parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {VERSION}')
@@ -1382,7 +1383,7 @@ def build_parser():
     parser.add_argument('-e', '--engines', type=str, default=None,
                         help=f'Comma-separated engine list (default: {",".join(DEFAULT_ENGINES)})')
     parser.add_argument('-m', '--max-results', type=int, default=DEFAULT_MAX_RESULTS,
-                        help=f'Max new links per query (default: {DEFAULT_MAX_RESULTS})')
+                        help='Max new links per query (default: 0 = no limit, fetch everything)')
     parser.add_argument('-x', '--export', type=str, default='txt',
                         choices=list(EXPORTERS.keys()),
                         help='Export format: txt, json, csv (default: txt)')
